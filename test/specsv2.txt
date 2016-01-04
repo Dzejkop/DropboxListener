@@ -1,0 +1,12 @@
+CPU: Intel i5 6500 Skylake
+GPU: MSI GTX 970 Gaming
+Motherboard: MSI B150 Gaming M3
+RAM: Kingston HyperX Fury 2x8GB DDR4-2133
+Dysk: Seagate Barracuda 1TB
+Dysk: Samsung 250GB SSD
+Zasilacz: Corsair CS550M
+Obudowa: SilentiumPC Gladius M20 Pure Black
+Monitor: LG 23MP47HQ-P
+
+Kosz: 5076,99 z³
++ dostawa 19 z³
