@@ -33,16 +33,14 @@ public class FileProcessor {
     }
 
     public void submitFile(File f, Consumer<File> startCallback, Consumer<File> successCallback) {
-        synchronized (f) {
-            executor.execute(() -> {
-                // Start
-                startCallback.accept(f);
+        executor.execute(() -> {
+            // Start
+            startCallback.accept(f);
 
-                dropboxManager.uploadFile(f);
+            dropboxManager.uploadFile(f);
 
-                // Callback
-                successCallback.accept(f);
-            });
-        }
+            // Callback
+            successCallback.accept(f);
+        });
     }
 }

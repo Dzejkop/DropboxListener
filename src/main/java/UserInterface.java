@@ -5,7 +5,10 @@ import java.io.File;
 /**
  * Created by Jakobs on 2015-12-10.
  */
-public class UserInterface extends JFrame implements StatisticsTarget {
+public class UserInterface extends JFrame {
+
+    Statistics statistics;
+    DirectoryHandler directoryHandler;
 
     public UserInterface() throws HeadlessException {
         this.setContentPane(rootPanel);
@@ -22,10 +25,7 @@ public class UserInterface extends JFrame implements StatisticsTarget {
         DirectoryHandler directoryHandler = new DirectoryHandler(new File(targetDirectoryTextField.getText()));
         DropboxManager dropboxManager = new DropboxManager();
         FileProcessor fileProcessor = new FileProcessor(dropboxManager, numberOfThreadsSlider.getValue());
-        Statistics statistics = new Statistics();
-
-        // Setup statistics
-        statistics.setStatisticsTarget(this);
+        statistics = new Statistics();
 
         // Listeners
         directoryHandler.addOnNewFileDetectedListener(n -> System.out.println("New file detected: " + n.getName()));
@@ -35,17 +35,23 @@ public class UserInterface extends JFrame implements StatisticsTarget {
     }
 
     private void start() {
-        DirectoryHandler directoryHandler = setup();
+        directoryHandler = setup();
 
         new Thread(() -> {
             while (true) {
-                directoryHandler.listen();
+                loop();
             }
         }).start();
 
         for(Component c : controlPanel.getComponents()) c.setEnabled(false);
         controlPanel.revalidate();
         controlPanel.doLayout();
+    }
+
+    public void loop() {
+        directoryHandler.listen();
+        updateTotalFilesSent(statistics.getTotalFilesSent());
+        updateFilesPerSecond(statistics.getFilesSentPerSecond());
     }
 
     private JPanel rootPanel;
@@ -58,12 +64,10 @@ public class UserInterface extends JFrame implements StatisticsTarget {
     private JTextField targetDirectoryTextField;
 
 
-    @Override
     public void updateFilesPerSecond(float fps) {
         filesPerSecondLabel.setText("Files per second: " + String.format("%.3f", fps));
     }
 
-    @Override
     public void updateTotalFilesSent(int total) {
         totalFilesSentLabel.setText("Total: " + total);
     }
